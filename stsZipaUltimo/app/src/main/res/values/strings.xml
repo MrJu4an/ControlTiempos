@@ -1,0 +1,88 @@
+<resources>
+    <string name="app_name">zipasts</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Actualizar datos</string>
+
+    <string name="menu_home">Leer</string>
+<string name="menu_gallery">Recargar</string>
+<string name="menu_slideshow">Control</string>
+<string name="menu_reporte">Reporte</string>
+<string name="menu_Cerrar">Cerrar</string>
+
+    <!-- Actions -->
+<string name="operation_succeed">succeed!</string>
+<string name="operation_failed">failed!</string>
+
+    <!-- RFCardAction -->
+<string name="find_card_succeed">Find card succeed</string>
+<string name="find_card_failed">Find card failed</string>
+<string name="absent_card_succeed">Card is absent</string>
+<string name="absent_card_failed">Card absent failed</string>
+<string name="rfcard_remove_card">Please remove the card</string>
+<string name="infotar">INFORMACION TARJETA</string>
+<string name="Imprimir">Imprimir</string>
+<string name="cerrar">CIERRE DE TURNO</string>
+<string name="idTirno">Id Turno:</string>
+<string name="TRecargas">Recargas:</string>
+<string name="cerrarTurno">Cerrar Turno</string>
+<string name="url">IP Principal:</string>
+<string name="grabar">Grabar</string>
+<string name="datosPendientes">"Tiene Datos pendientes por transmitir."</string>
+
+    <!-- Vista -->
+<string name="Estado">Estado:</string>
+<string name="Placa">Placa:</string>
+<string name="NumInterno">Interno:</string>
+<string name="Saldo">Saldo:</string>
+<string name="CodEmpresa">Cod.Empresa:</string>
+<string name="Vacio">______________</string>
+<string name="TituloInfoTat">Información de Tarjetas</string>
+<string name="Leer">Leer</string>
+<string name="TituloRecargaTar">Recargar Tarjetas</string>
+<string name="SaldoAct">Saldo Actual:</string>
+<string name="SugerenciaRecarga">Valor</string>
+<string name="Recargar">Recargar</string>
+<string name="Recarga">Recarga:</string>
+<string name="NomEmpresa">Nom.Empresa:</string>
+<string name="ipProduccion">http://190.85.248.13/zipaApi/api/stszipa/</string>
+    <string name="ipPruebas">http://pruebasctec.franjahost.com:8080/stszipa/api/stszipa/</string>
+    <string name="nomempresa">Consultores Tecnológicos/</string>
+<string name="TituloCtrl">Control de tiempos</string>
+<string name="txtCodOrigen">Codigo de Origen:</string>
+<string name="txtSugCod">Codigo</string>
+<string name="tvAgencia">Agencia:</string>
+<string name="tvFechaAct">Fecha Act:</string>
+<string name="tvHoraAct">Hoara Act:</string>
+<string name="btnRegistrar">Registrar</string>
+<string name="TituloFormaPago">Forma de Pago</string>
+<string name="Efectivo">Efectivo</string>
+<string name="Tarjeta">Tarjeta</string>
+<string name="Cancelar">Cancelar</string>
+<string name="TitReport">Reporte de Controles</string>
+<string name="tipBusqueda">Codigo de busqueda</string>
+<string name="sugPlaca">Placa</string>
+<string name="sugInterno">Cod.Interno</string>
+<string name="btnBuscar">Buscar</string>
+    <string name="btnCancelar">Cancelar</string>
+<string name="TitCerrar">Cierre de Turno</string>
+<string name="cEfectivo">Efectivo:</string>
+<string name="cTarjetas">Tarjetas:</string>
+<string name="cTotal">Total:</string>
+<string name="cCaja">Cuadre de Caja</string>
+<string name="btnCerrarCaja">Cerrar Caja</string>
+    <!-- TODO: Remove or change this placeholder text -->
+<string name="hello_blank_fragment">Hello blank fragment</string>
+<string name="dummy_button">Dummy Button</string>
+<string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="menu_info_tarjeta">Info Tarjeta</string>
+    <string name="empresa">Empresa</string>
+    <string name="rowPlaca">Placa</string>
+    <string name="rowOrigen">Origen</string>
+    <string name="rowDestino">Destino</string>
+    <string name="rowAcciones">Acciones</string>
+    <string name="rowHorOrigen">Hor. Ori.</string>
+</resources>
