@@ -345,6 +345,10 @@ public class ControlFragment extends Fragment {
                     tarjetaModel= data.getTarjeta(datoTarjeta.getPlacaPort());
                     empresa= data.getEmpresa(datoTarjeta.getCodEmpresa());
                     vehiculo= data.getVehiculoPlaca(datoTarjeta.getPlacaPort());
+                    if (vehiculo.getPlaca() == null){
+                        mensaje.MensajeAdvertencia(getContext(), Mensaje.MEN_INFO,"Error el vehículo puede estar inactivo");
+                        return false;
+                    }
                     // horaAnterior= datoTarjeta.getUltHoraRec();
                     /*if(!tarjetaModel.getTipo().equals("C")){
                         if(sweetAlertDialog.isShowing())

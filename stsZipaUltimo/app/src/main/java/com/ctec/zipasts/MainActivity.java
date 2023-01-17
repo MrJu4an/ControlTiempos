@@ -1133,7 +1133,6 @@ public class MainActivity extends AppCompatActivity {
                                     desglosaResolucion(rpta.getRespuesta());
                                     sweetAlertDialog.dismiss();
                                     descargaPuntosVenta();
-                                    // consultarConsecutivos();
                                 }else{
                                     sweetAlertDialog.dismiss();
                                     mensaje.MensajeAdvertencia(contexto,Mensaje.MEN_ADV,"No descargo resolucion");
@@ -1236,10 +1235,8 @@ public class MainActivity extends AppCompatActivity {
                             if(rpta.getEstado()){
                                 sweetAlertDialog.dismiss();
                                 writePreference(ConfigActivity.PREF_EMP_NO,rpta.getRespuesta());
-                                sweetAlertDialog= mensaje.MensajeConfirmacionExitosoConUnBoton(MainActivity.this
-                                        ,Mensaje.MEN_CONFIRMA,"Datos Actualizados!");
-                                sweetAlertDialog.setConfirmClickListener(sweetAlertDialog -> sweetAlertDialog.dismiss());
-                                sweetAlertDialog.show();
+                                consultarConsecutivos();
+
                             }else{
                                 sweetAlertDialog.dismiss();
                                 mensaje.MensajeAdvertencia(MainActivity.this,Mensaje.MEN_ADV,"No descargo empresas no cobro");
@@ -1348,6 +1345,143 @@ public class MainActivity extends AppCompatActivity {
         writePreference(ConfigActivity.PREF_COD_RECARGA,desglose[2] );
         writePreference(ConfigActivity.PREF_COD_CONTROL,desglose[3] );
 
+    }
+
+    private void consultarConsecutivos(){
+        try {
+            final Data data = new Data(contexto);
+            if(sweetAlertDialog.isShowing())
+                sweetAlertDialog.dismiss();
+            sweetAlertDialog = mensaje.progreso(contexto, "Descargando Consecutivos");
+            sweetAlertDialog.show();
+            //String PUERTO = "?puerto=" + Global.g_puerto;
+            String PUERTO = "?puerto=" + readPreference(ConfigActivity.PREF_PUERTO);
+            String URL = readPreference(ConfigActivity.PREF_API)+Utils.CONSULTAR_CONSEC+PUERTO;
+
+            final StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
+                    response -> {
+                        try {
+                            respuesta rpta = new Gson().fromJson(response,respuesta.class);
+                            if(rpta.getEstado()){
+                                String[] consecutivos= rpta.getRespuesta().split(";");
+                                int nueNumFac=Integer.parseInt(consecutivos[0])+1;
+                                int nueNumRec=Integer.parseInt(consecutivos[1])+1;
+                                writePreference(ConfigActivity.PREF_NUMFAC,String.valueOf(nueNumFac));
+                                writePreference(ConfigActivity.PREF_NUMREC,String.valueOf(nueNumRec));
+                                //asignarTurno();
+                                if(sweetAlertDialog.isShowing())
+                                    sweetAlertDialog.dismiss();
+                                    sweetAlertDialog= mensaje.MensajeConfirmacionExitosoConUnBoton(MainActivity.this
+                                            ,Mensaje.MEN_CONFIRMA,"Datos Actualizados!");
+                                    sweetAlertDialog.setConfirmClickListener(sweetAlertDialog -> sweetAlertDialog.dismiss());
+                                    sweetAlertDialog.show();
+                                //iniciarMenu(usuVer,menApi);
+                            }else{
+                                if(sweetAlertDialog.isShowing())
+                                    sweetAlertDialog.dismiss();
+                                mensaje.MensajeAdvertencia(contexto,Mensaje.MEN_ADV,"No descargo consecutivos");
+                            }
+
+
+
+                        }catch (Exception e){
+                            /*String ErrorDes = preferencias.ReadSharedPreference(contexto, Constantes.PREF_DOWNLOADERROR);
+                            preferencias.updateSharedPreference(contexto,Constantes.PREF_DOWNLOADERROR, ErrorDes + " Empresas");
+                            */
+                            if(sweetAlertDialog.isShowing())
+                                sweetAlertDialog.dismiss();
+
+                            mensaje.MensajeAdvertencia(contexto,
+                                    Mensaje.MEN_ADV,"Error al descargar: ");
+                            e.printStackTrace();
+                        }
+
+                    }, error -> {
+                String message = "";
+                        /*
+                        String ErrorDes = preferencias.ReadSharedPreference(contexto, Constantes.PREF_DOWNLOADERROR);
+                        preferencias.updateSharedPreference(contexto,Constantes.PREF_DOWNLOADERROR, ErrorDes + " Empresas");
+                        if (error.toString().equals("com.android.volley.TimeoutError")){
+                            sweetAlertDialog.dismiss();
+                            mensaje.MensajeAdvertencia(contexto,
+                                    Mensajes.MSG_ALERTA, Mensajes.MSG_TIMEOUTERROR);
+
+
+                            return;
+                        } */
+
+                NetworkResponse networkResponse = error.networkResponse;
+                String msj = error.getMessage();
+                try{
+                    assert msj != null;
+                    if (msj.contains("EHOSTUNREACH"))
+                    {
+                        error.printStackTrace();
+                        if(sweetAlertDialog.isShowing())
+                            sweetAlertDialog.dismiss();
+                        mensaje.MensajeAdvertencia(contexto,Mensaje.MEN_ADV,Mensaje.MSG_EHOSTUNREACH);
+                        return;
+                    }
+                    if (msj.contains("ECONNREFUSED"))
+                    {
+                        error.printStackTrace();
+                        if(sweetAlertDialog.isShowing())
+                            sweetAlertDialog.dismiss();
+                        mensaje.MensajeAdvertencia(contexto,Mensaje.MEN_ADV,Mensaje.MSG_ECONNREFUSED);
+                        return;
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Log.d("Eresponse", "onErrorResponse: "+e.getMessage());
+                }
+
+                try {
+
+                    String respErr = new String(error.networkResponse.data);
+                    JSONObject data1 = new JSONObject(respErr);
+                    try{
+                        JSONArray errors = data1.getJSONArray("errors");
+                        JSONObject jsonMessage = errors.getJSONObject(0);
+                        message = jsonMessage.getString("message");
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                    try{
+                        message = data1.getString("Message");
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                    if(sweetAlertDialog.isShowing())
+                        sweetAlertDialog.dismiss();
+                    mensaje.MensajeAdvertencia(contexto, Mensaje.MEN_ADV, message);
+                    Log.d("Download", "onErrorResponse: " + message);
+                }catch (Exception e){
+                    try{
+                        String respErr = new String(error.networkResponse.data);
+                        if(sweetAlertDialog.isShowing())
+                            sweetAlertDialog.dismiss();
+                        mensaje.MensajeAdvertencia(contexto,
+                                Mensaje.MSG_ERROR,respErr);
+                    }catch (Exception ex){
+                        if(sweetAlertDialog.isShowing())
+                            sweetAlertDialog.dismiss();
+                        mensaje.MensajeAdvertencia(contexto,
+                                Mensaje.MSG_ERROR,ex.getMessage());
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+            ) ;
+            //tiempo de espera de conexcion initialTimeout 4000 maxNumRetries = 0
+            stringRequest.setRetryPolicy(new DefaultRetryPolicy(90000,
+                    0,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            Volley.newRequestQueue(contexto).add(stringRequest);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 
