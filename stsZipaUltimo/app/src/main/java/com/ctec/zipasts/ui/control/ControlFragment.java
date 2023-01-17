@@ -615,7 +615,7 @@ public class ControlFragment extends Fragment {
         }else{
             facturaModel.setForma(formPago);
             facturaModel.setValor(valorConcep);
-            //facturaModel.setNumFac(Long.parseLong(numFac));
+            facturaModel.setNumFac(Long.parseLong(numFac));
         }
         facturaModel.setAsociada(agencia.getCodAgenAso());
         facturaModel.setDestino(FacturaModel.FAC_COD_DESTINO);

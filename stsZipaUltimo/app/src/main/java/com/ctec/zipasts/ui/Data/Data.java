@@ -1,5 +1,7 @@
 package com.ctec.zipasts.ui.Data;
 
+import static java.lang.Integer.parseInt;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -1278,7 +1280,7 @@ public class Data {
                 Cursor fila = sqLiteDatabase.rawQuery("select * from control where agenciaOri ="+ codOrigen, null);
                 while (fila.moveToNext()) {
                     ent=true;
-                    int temp=Integer.parseInt(fila.getString(3));
+                    int temp= parseInt(fila.getString(3));
                     if(temp>busq){
                         busq=temp;
                         control.setPlaca(fila.getString(0));
@@ -1377,7 +1379,7 @@ public class Data {
             Cursor fila = sqLiteDatabase.rawQuery("select * from facturas", null);
             while (fila.moveToNext()) {
                 FacturaModel fact= new FacturaModel();
-                //fact.setNumFac(fila.getString(0));
+                fact.setNumFac(parseInt(fila.getString(0)));
                 fact.setCodAgencia(fila.getString(1));
                 fact.setFecha((fila.getString(2)));
                 fact.setUsuario(fila.getString(3));
