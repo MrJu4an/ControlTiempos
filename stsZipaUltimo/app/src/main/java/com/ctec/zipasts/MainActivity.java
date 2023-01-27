@@ -771,6 +771,11 @@ public class MainActivity extends AppCompatActivity {
                 mensaje.MensajeAdvertencia(contexto , Mensaje.MEN_ADV, Mensaje.MSG_MOVILSINCX);
                 return;
             }
+            generarTramas();
+            if(contTramas > 0) {
+                mensaje.MensajeAdvertencia(contexto , Mensaje.MEN_ADV, "Tiene tramas pendientes de enviar.");
+                return;
+            }
             final Data data = new Data(contexto);
             sweetAlertDialog = mensaje.progreso(contexto, "Descargando Empresas");
             sweetAlertDialog.show();
