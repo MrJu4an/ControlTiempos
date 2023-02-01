@@ -120,6 +120,7 @@ public class LecturaFragment extends Fragment {
         txtCodEmp= root.findViewById(R.id.txtCodEmp);
         txtNomEmp= root.findViewById(R.id.txtNomEmp);
         btnImprimir.setEnabled(false);
+        btnImprimir.setVisibility(View.INVISIBLE);
         data = new Data(getContext());
 
         btnLeer.setOnClickListener(new View.OnClickListener() {
