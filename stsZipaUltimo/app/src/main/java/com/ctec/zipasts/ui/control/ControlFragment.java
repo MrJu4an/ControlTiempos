@@ -653,6 +653,7 @@ public class ControlFragment extends Fragment {
         // Get the layout inflater
         LayoutInflater inflater = getLayoutInflater();
         // Inflar y establecer el layout para el dialogo
+        // Inflar y establecer el layout para el dialogo
         // Pasar nulo como vista principal porque va en el diseño del diálogo
         View v = inflater.inflate(R.layout.dialog_pago, null);
         //builder.setView(inflater.inflate(R.layout.dialog_signin, null))

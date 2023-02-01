@@ -42,6 +42,7 @@
 <string name="Vacio">______________</string>
 <string name="TituloInfoTat">Información de Tarjetas</string>
 <string name="Leer">Leer</string>
+    <string name="LeerPlaca">Placa</string>
 <string name="TituloRecargaTar">Recargar Tarjetas</string>
 <string name="SaldoAct">Saldo Actual:</string>
 <string name="SugerenciaRecarga">Valor</string>

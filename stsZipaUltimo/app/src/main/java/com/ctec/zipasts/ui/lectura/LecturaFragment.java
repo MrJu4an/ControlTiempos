@@ -1,12 +1,17 @@
 package com.ctec.zipasts.ui.lectura;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,6 +36,8 @@ import com.cloudpos.rfcardreader.RFCardReaderDevice;
 import com.cloudpos.rfcardreader.RFCardReaderOperationResult;
 import com.ctec.zipasts.R;
 import com.ctec.zipasts.databinding.FragmentLeerBinding;
+import com.ctec.zipasts.ui.Config.ConfigActivity;
+import com.ctec.zipasts.ui.Loguin.Loguin_Activity;
 import com.wizarpos.mvc.base.ActionCallback;
 import com.ctec.zipasts.ui.Card.ActionCallbackImpl;
 import com.ctec.zipasts.ui.Card.DatoTarjeta;
@@ -40,6 +47,8 @@ import com.ctec.zipasts.ui.Data.Data;
 import com.ctec.zipasts.ui.Helper.Mensaje;
 import com.ctec.zipasts.ui.Helper.Utils;
 import com.ctec.zipasts.ui.Model.VehiculoModel;
+
+import org.bouncycastle.jce.provider.PBE;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -52,7 +61,7 @@ public class LecturaFragment extends Fragment {
 
    // private LecturaViewModel homeViewModel;
     private FragmentLeerBinding binding;
-    private Button btnLeer;
+    private Button btnLeer, btnLeerPlaca;
     private TextView txtPlaca,txtCodInt,txtCodEmp,txtEstado,txtSaldo, txtNomEmp;
     private Mensaje mensaje = new Mensaje();
     private RFCardReaderDevice device;
@@ -77,6 +86,7 @@ public class LecturaFragment extends Fragment {
     String codEmp="";
     String nomEmp="";
     String estado="";
+    String placaConsulta="";
     SimpleDateFormat formatFec = new SimpleDateFormat("dd/MMM/yyyy");
 
 
@@ -101,6 +111,7 @@ public class LecturaFragment extends Fragment {
 
          */
         btnLeer = root.findViewById(R.id.btnLeerTarjeta);
+        btnLeerPlaca = root.findViewById(R.id.btnLeerPlaca);
         txtEstado = root.findViewById(R.id.txtEstado);
         txtSaldo = root.findViewById(R.id.txtSaldo);
         txtCodInt= root.findViewById(R.id.txtCodInterno);
@@ -117,6 +128,7 @@ public class LecturaFragment extends Fragment {
                 LeerInfoTarjeta();
             }
         });
+        btnLeerPlaca.setOnClickListener(view -> validarPlaca());
         mHandler = new Handler();
         handler = new Handler(handlerCallback);
         actionCallback = new ActionCallbackImpl(getContext(), handler);
@@ -139,6 +151,43 @@ public class LecturaFragment extends Fragment {
 
         return root;
 
+    }
+
+    private void validarPlaca() {
+        final EditText editText = new EditText(getContext());
+        editText.setInputType(InputType.TYPE_CLASS_TEXT);
+        editText.setTextColor(Color.BLACK);
+        LinearLayout linearLayout = new LinearLayout(getContext());
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.addView(editText);
+        sweetAlertDialog = mensaje.MensajeConfirmacionAdvertenciaConUnBoton(
+                getContext(),"Digite la placa a consultar","");
+        sweetAlertDialog.setCustomView(linearLayout);
+        sweetAlertDialog.setConfirmClickListener(sweetAlertDialog -> {
+            placaConsulta = editText.getText().toString().trim();
+            if (placaConsulta.length() > 5 && placaConsulta.length() < 7) {
+                VehiculoModel vehiculo = data.getVehiculoPlaca(placaConsulta);
+                if (vehiculo.getPlaca() == null) {
+                    if (sweetAlertDialog.isShowing())
+                        sweetAlertDialog.dismiss();
+                    mensaje.MensajeAdvertencia(getContext(), Mensaje.MEN_INFO, "Error el vehículo puede estar inactivo");
+                    return;
+                }
+                if (sweetAlertDialog.isShowing())
+                    sweetAlertDialog.dismiss();
+                respuesta = "PLACA";
+                actionCallback.sendResponse(respuesta);
+
+                return;
+            } else {
+                //if (sweetAlertDialog.isShowing())
+                //    sweetAlertDialog.dismiss();
+                mensaje.MensajeAdvertencia(getContext(),
+                        Mensaje.MEN_ADV, "El mínimo y máximo de carácteres es de 6");
+                return;
+            }
+        });
+        sweetAlertDialog.show();
     }
 
     public void limpiar(){
@@ -213,9 +262,20 @@ public class LecturaFragment extends Fragment {
                 {
                     mensaje.MensajeAdvertencia(getContext(),"Info","Error Intente Nuevamente");
 
-
                 }else if(respuesta.equals("CLONADA")){
                     mensaje.MensajeAdvertencia(getContext(),Mensaje.MEN_ADV,"Tarjeta Clonada!");
+                }else if (respuesta.equals("PLACA")){
+                    if (!placaConsulta.equals("")){
+                        VehiculoModel vehi = data.getVehiculoPlaca(placaConsulta);
+                        txtPlaca.setText(vehi.getPlaca().trim());
+                        txtCodInt.setText(vehi.getNumInterno().trim());
+                        txtCodEmp.setText(vehi.getCodEmpresa().trim());
+                        String nomEmpresa = data.getEmpresa(vehi.getCodEmpresa().trim()).getNombre();
+                        txtNomEmp.setText(nomEmpresa);
+                        txtEstado.setText(vehi.getEstado());
+                        txtSaldo.setText(Utils.dollarFormat.format(Integer.valueOf(0)));
+                        btnImprimir.setEnabled(true);
+                    }
                 }
 
 

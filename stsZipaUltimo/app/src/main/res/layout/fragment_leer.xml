@@ -201,11 +201,24 @@
         android:id="@+id/btnLeerTarjeta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="140dp"
+        android:layout_marginStart="80dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="80dp"
         android:text="@string/Leer"
         android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/btnLeerPlaca"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitulo" />
+
+    <Button
+        android:id="@+id/btnLeerPlaca"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="80dp"
+        android:text="@string/LeerPlaca"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTitulo" />
 
     <TextView
