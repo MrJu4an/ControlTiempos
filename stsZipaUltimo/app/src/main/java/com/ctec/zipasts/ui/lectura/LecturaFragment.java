@@ -171,7 +171,7 @@ public class LecturaFragment extends Fragment {
                 if (vehiculo.getPlaca() == null) {
                     if (sweetAlertDialog.isShowing())
                         sweetAlertDialog.dismiss();
-                    mensaje.MensajeAdvertencia(getContext(), Mensaje.MEN_INFO, "Error el vehículo puede estar inactivo");
+                    mensaje.MensajeAdvertencia(getContext(), Mensaje.MEN_INFO, "Error la tarjeta esta inactiva");
                     return;
                 }
                 if (sweetAlertDialog.isShowing())
