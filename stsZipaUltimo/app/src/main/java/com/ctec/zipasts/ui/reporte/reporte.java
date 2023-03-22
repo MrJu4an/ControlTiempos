@@ -193,7 +193,8 @@ public class reporte extends Fragment {
             tvTPlaca.setText(listControles.get(i).getPlaca());
             tvTOrigen.setText(punto1);
             // tvTFecha.setText((listControles.get(i).getFecha()));
-            tvTHorigen.setText(listControles.get(i).getHoraOrigen());
+            //tvTHorigen.setText(listControles.get(i).getHoraOrigen());
+            tvTHorigen.setText(listControles.get(i).getHoraAgencia());
             //tvTHoraAgencia.setText(listControles.get(i).getHoraOrigen());
             //tvTDemora.setText(listControles.get(i).getDemora());
             final ControlTiempoModel model= listControles.get(i);
@@ -597,7 +598,8 @@ public class reporte extends Fragment {
                                     tvTPlaca.setText(listControles.get(i).getPlaca());
                                     tvTOrigen.setText(punto);
                                     // tvTFecha.setText((listControles.get(i).getFecha()));
-                                    tvTHorigen.setText(listControles.get(i).getHoraOrigen());
+                                    //tvTHorigen.setText(listControles.get(i).getHoraOrigen());
+                                    tvTHorigen.setText(listControles.get(i).getHoraAgencia());
                                     //tvTHoraAgencia.setText(listControles.get(i).getHoraOrigen());
                                     //tvTDemora.setText(listControles.get(i).getDemora());
                                     final ControlTiempoModel model= listControles.get(i);

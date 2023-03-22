@@ -83,7 +83,7 @@
     <string name="empresa">Empresa</string>
     <string name="rowPlaca">Placa</string>
     <string name="rowOrigen">Origen</string>
-    <string name="rowDestino">Destino</string>
+    <string name="rowDestino">Punto</string>
     <string name="rowAcciones">Acciones</string>
-    <string name="rowHorOrigen">Hor. Ori.</string>
+    <string name="rowHorOrigen">Hora</string>
 </resources>

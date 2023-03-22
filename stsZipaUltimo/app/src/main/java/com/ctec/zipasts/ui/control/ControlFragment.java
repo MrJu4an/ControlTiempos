@@ -346,7 +346,7 @@ public class ControlFragment extends Fragment {
                     empresa= data.getEmpresa(datoTarjeta.getCodEmpresa());
                     vehiculo= data.getVehiculoPlaca(datoTarjeta.getPlacaPort());
                     if (vehiculo.getPlaca() == null){
-                        mensaje.MensajeAdvertencia(getContext(), Mensaje.MEN_INFO,"Error el vehículo puede estar inactivo");
+                        mensaje.MensajeAdvertencia(getContext(), Mensaje.MEN_INFO,"No se logró identificar la placa de la tarjeta");
                         return false;
                     }
                     // horaAnterior= datoTarjeta.getUltHoraRec();
