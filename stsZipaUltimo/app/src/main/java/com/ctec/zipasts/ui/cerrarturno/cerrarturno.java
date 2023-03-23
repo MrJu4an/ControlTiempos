@@ -641,7 +641,7 @@ public class cerrarturno extends Fragment {
     }
 
     public HashMap<String,Integer> datosVentaEmpresa(){
-        ArrayList<FacturaModel> facturas= data.getFacturas();
+        ArrayList<FacturaModel> facturas= data.getFacturasCierre();
         ArrayList<String> empEnLista= new ArrayList<>();
         HashMap<String,Integer> pagosEmpresas= new HashMap<>();
         contadorPagosEmpresa= new HashMap<>();

@@ -1242,6 +1242,53 @@ public class Data {
         return control;
     }
 
+    public ControlTiempoModel getUltControlPlaca(String placa){
+        SQLiteDatabase sqLiteDatabase;
+        DBHelper sqLiteOpenHelper;
+        sqLiteOpenHelper = new DBHelper(context);
+        sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
+        String[] whereArgs = new String[]{String.valueOf(placa)};
+        ControlTiempoModel control = new ControlTiempoModel();
+        int busq=0;
+        boolean ent=false;
+        try{
+            if(!placa.isEmpty()){
+                Cursor fila = sqLiteDatabase.query(ControlTiempoModel.NOMBRETABLA,ControlTiempoModel.COL_TODAS,
+                        ControlTiempoModel.WHERE_PLACA,whereArgs,null,null,null);
+                while (fila.moveToNext()) {
+                    ent=true;
+                    int temp= parseInt(fila.getString(3));
+                    if(temp>busq){
+                        busq=temp;
+                        control.setPlaca(fila.getString(0));
+                        control.setAgenciaOri(fila.getString(1));
+                        control.setFecha((fila.getString(2)));
+                        control.setSecuencia(fila.getString(3));
+                        control.setHoraOrigen(fila.getString(4));
+                        control.setHoraAgencia(fila.getString(5));
+                        control.setDemora(fila.getString(6));
+                        control.setFrecuencia(fila.getString(7));
+                        control.setEnCadena(fila.getString(8));
+                        control.setCodempant(fila.getInt(9));
+                        control.setPlacaAnt(fila.getString(10));
+                        control.setHoraOrigenAnt(fila.getString(11));
+                        control.setHoraAgenciaAnt(fila.getString(12));
+                        control.setDemoraAnt(fila.getString(13));
+                        //control.setCoddes(fila.getInt(14));
+                    }
+                }
+                sqLiteDatabase.close();
+                if(!ent){
+                    control = null;
+                }
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            control = null;
+        }
+        return control;
+    }
+
     public void confirmarEnCadenaControl(String secuencia){
         SQLiteDatabase sqLiteDatabase;
         DBHelper sqLiteOpenHelper;
@@ -1406,6 +1453,45 @@ public class Data {
         return facturas;
     }
 
+    public ArrayList<FacturaModel> getFacturasCierre(){
+        SQLiteDatabase sqLiteDatabase;
+        DBHelper sqLiteOpenHelper;
+        sqLiteOpenHelper = new DBHelper(context);
+        sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
+
+        ArrayList<FacturaModel> facturas = new ArrayList<FacturaModel>();
+        try{
+
+            Cursor fila = sqLiteDatabase.rawQuery("select * from facturas where valor <> '0' ", null);
+            while (fila.moveToNext()) {
+                FacturaModel fact= new FacturaModel();
+                fact.setNumFac(parseInt(fila.getString(0)));
+                fact.setCodAgencia(fila.getString(1));
+                fact.setFecha((fila.getString(2)));
+                fact.setUsuario(fila.getString(3));
+                fact.setValor(fila.getString(4));
+                fact.setForma(fila.getString(5));
+                fact.setDestino(fila.getString(6));
+                fact.setEmpresa(fila.getString(7));
+                fact.setPlaca(fila.getString(8));
+                fact.setAsociada(fila.getString(9));
+                fact.setTurno(fila.getString(10));
+                fact.setIdTarjeta(fila.getString(11));
+                fact.setSaldo(fila.getString(12));
+                fact.setPlanilla(fila.getString(13));
+                fact.setEnCadena(fila.getString(14));
+                facturas.add(fact);
+
+            }
+
+
+            fila.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return facturas;
+    }
+
     public FacturaModel getFactura(String numFac){
         SQLiteDatabase sqLiteDatabase;
         DBHelper sqLiteOpenHelper;
@@ -1459,6 +1545,27 @@ public class Data {
 
     }
 
+    public void pasarFacturaCero(String placa){
+        SQLiteDatabase sqLiteDatabase;
+        DBHelper sqLiteOpenHelper;
+        sqLiteOpenHelper = new DBHelper(context);
+        sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("valor", 0);
+        String[] whereArgs = new String[]{String.valueOf(placa)};
+        try{
+            if(!placa.isEmpty()){
+
+                //sqLiteDatabase.update(FacturaModel.NOMBRETABLA, cv, "placa=?", whereArgs );
+                sqLiteDatabase.execSQL("UPDATE facturas SET valor= '0' where placa='"
+                        + placa +"' and numFac = (SELECT MAX(numFac) FROM facturas WHERE placa='"+ placa +"')");
+            } else {
+                Toast.makeText(context, "No se pudo pasar la factura anterior a 0", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     public void eliminarFacturas(){
         try {
@@ -1484,6 +1591,8 @@ public class Data {
         }
 
     }
+
+
 
 //endregion
 

@@ -56,6 +56,7 @@ import com.ctec.zipasts.ui.Model.VehiculoModel;
 import com.google.gson.Gson;
 import com.wizarpos.mvc.base.ActionCallback;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -122,6 +123,8 @@ public class ControlFragment extends Fragment {
     private String demora="00:00:00";
     private String horaAnterior="";
     private String fecActual;
+    private String fecAnt;
+    private ControlTiempoModel ultControl;
     private String formPago="";
     private String planilla="";
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", new Locale("es", "CO"));
@@ -668,6 +671,12 @@ public class ControlFragment extends Fragment {
                     // 2884;
                     clickEfectivo= true;
                     formPago="EFE";
+                    //Sebastián Rondón 23 de Marzo - 2023
+                    //Si un vehículo vuelva a pasar en menos de 10 min
+                    //La factura del control anterior se pasará a valor 0
+                    //*****************************************************
+                    revisarControlAnterior(vehiculo.getPlaca());
+                    //*****************************************************
                     guardaControl(vehiculo.getPlaca(),fecActual,agenciaOrigen.getcodciudad(),horaAnterior,datoTarjeta.getUltHoraRec());
                     guardarFactura();
                     String totEfe= readPreference(ConfigActivity.PREF_TOTALEFECTIVO);
@@ -1426,6 +1435,42 @@ public class ControlFragment extends Fragment {
             return false;
         }
         return true;
+    }
+
+    public void revisarControlAnterior(String placa){
+        if(!placa.isEmpty()){
+            //Buscamos el último control del vehículo
+            ultControl = data.getUltControlPlaca(placa);
+            if(ultControl != null){
+                //Si se encontró un control vamos comparar sus fechas, para saber si está dentro de los últimos 10 min
+                Calendar c = Calendar.getInstance();
+                c.add(Calendar.MINUTE, -10);
+                fecAnt = sdfhN.format(c.getTime());
+                //Convertimos a fechas
+                try{
+                    Date fecha1 = sdfhN.parse(ultControl.getFecha());
+                    Date fecha2 = sdfhN.parse(fecAnt);
+                    if(fecha1.after(fecha2)) {
+                        //Si es mayor a los últimos 10 min, procedemos a pasar su factura a 0
+                        data.pasarFacturaCero(ultControl.getPlaca());
+
+                        //Restamos al total en efectivo
+                        String totEfe= readPreference(ConfigActivity.PREF_TOTALEFECTIVO);
+                        int intEfe= (totEfe.equals(""))?0:Integer.valueOf(totEfe);
+                        int valor= intEfe-Integer.valueOf(valorConcep) ;
+                        writePreference(ConfigActivity.PREF_TOTALEFECTIVO,String.valueOf(valor));
+
+                        //Restamos al total por concepto
+                        String totCon= readPreference(ConfigActivity.PREF_TOTAL_CONTROL);
+                        int intEfeCon = (totCon.equals(""))?0:Integer.valueOf(totCon);
+                        int valorCon = intEfeCon-Integer.valueOf(valorConcep);
+                        writePreference(ConfigActivity.PREF_TOTAL_CONTROL, String.valueOf(valorCon));
+                    }
+                } catch (ParseException e){
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public String readPreference(String key){
