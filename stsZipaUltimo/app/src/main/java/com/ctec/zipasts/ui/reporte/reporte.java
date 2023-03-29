@@ -381,8 +381,8 @@ public class reporte extends Fragment {
                                 {
                                     printerDevice.printText(format, "Hora Reg Origen: "+ model.getHoraOrigen()+"\n");
                                 }
-                                //printerDevice.printText(format, "Hora Reg Control: "+ model.getHoraAgencia()+"\n");
-                                printerDevice.printText(format, "Hora Reg Control: "+ model.getHoraOrigen()+"\n");
+                                printerDevice.printText(format, "Hora Reg Control: "+ model.getHoraAgencia()+"\n");
+                                //printerDevice.printText(format, "Hora Reg Control: "+ model.getHoraOrigen()+"\n");
                                 if(!nomOrigen.equals(nomDestino))
                                 {
                                     printerDevice.printText(format,"Demora  : "+model.getDemora()+"\n");
