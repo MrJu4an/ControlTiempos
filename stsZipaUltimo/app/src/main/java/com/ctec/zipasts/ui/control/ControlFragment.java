@@ -866,8 +866,8 @@ public class ControlFragment extends Fragment {
         }else{
             int secuenciaIncremento= Integer.parseInt(secGuardada)+1;
             String secuenciaNueva= String.valueOf(secuenciaIncremento);
-
             writePreference(ControlTiempoModel.SECUENCIA,secuenciaNueva);
+            secGuardada = secuenciaNueva;
         }
         control= new ControlTiempoModel();
         control.setPlaca(placa);
@@ -1067,7 +1067,8 @@ public class ControlFragment extends Fragment {
             String aux = String.format("%16s",cad);
             byte[] arryData =  aux.getBytes();
             Log.d("ultFecRec",String.valueOf( arryData.length));
-            if(!agencia.getNombre().equals("CT SAN CARLOS"))
+            //if(!agencia.getNombre().equals("CT SAN CARLOS"))
+            if(!agencia.getNombre().equals("S. CARLOS"))
             {
                 mifare.writeBlock(rfCard,arryData,8,0);
             }
@@ -1076,7 +1077,8 @@ public class ControlFragment extends Fragment {
             aux = String.format("%16s",cad);
             arryData =  aux.getBytes();
             Log.d("ultHoraRec",String.valueOf( arryData.length));
-            if(!agencia.getNombre().equals("CT SAN CARLOS"))
+            //if(!agencia.getNombre().equals("CT SAN CARLOS"))
+            if(!agencia.getNombre().equals("S. CARLOS"))
             {
                 mifare.writeBlock(rfCard,arryData,9,0);
             }
