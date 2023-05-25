@@ -349,8 +349,12 @@ public class ControlFragment extends Fragment {
                     empresa= data.getEmpresa(datoTarjeta.getCodEmpresa());
                     vehiculo= data.getVehiculoPlaca(datoTarjeta.getPlacaPort());
                     if (vehiculo.getPlaca() == null){
-                        mensaje.MensajeAdvertencia(getContext(), Mensaje.MEN_INFO,"No se logró identificar la placa de la tarjeta");
-                        return false;
+                        vehiculo.setPlaca(datoTarjeta.getPlacaPort());
+                        vehiculo.setNumInterno(datoTarjeta.getInternoPort());
+                        vehiculo.setCodEmpresa(datoTarjeta.getCodEmpresa());
+                        vehiculo.setEstado("A");
+                        //mensaje.MensajeAdvertencia(getContext(), Mensaje.MEN_INFO,"No se logró identificar la placa de la tarjeta");
+                        //return false;
                     }
                     // horaAnterior= datoTarjeta.getUltHoraRec();
                     /*if(!tarjetaModel.getTipo().equals("C")){
@@ -402,6 +406,9 @@ public class ControlFragment extends Fragment {
                         sweetAlertDialog.dismiss();
                     return true;
                 }else if(respuesta.equals("PAGADO")){
+                    if(sweetAlertDialog.isShowing())
+                        sweetAlertDialog.dismiss();
+                    mensaje.MensajeAdvertencia(getContext(),Mensaje.MEN_ADV,"Entro a Pagado!");
                     guardarFactura();
                     String totTar= readPreference(ConfigActivity.PREF_TOTALTARJETA);
                     int intTar= (totTar.equals(""))?0:Integer.parseInt(totTar);
@@ -420,6 +427,11 @@ public class ControlFragment extends Fragment {
                         sweetAlertDialog.dismiss();
                     sweetAlertDialog= mensaje.MensajeConfirmacionAdvertenciaConUnBoton(context,Mensaje.MEN_ADV,"No posee saldo suficiente");
                     sweetAlertDialog.setConfirmClickListener(sweetAlertDialog -> dialogPago());
+                } else{
+                    if(sweetAlertDialog.isShowing())
+                        sweetAlertDialog.dismiss();
+                    mensaje.MensajeAdvertencia(getContext(),Mensaje.MEN_ADV,"Error identificando la tarjeta! " + respuesta);
+                    //sweetAlertDialog.setConfirmClickListener(sweetAlertDialog -> dialogPago());
                 }
 
 

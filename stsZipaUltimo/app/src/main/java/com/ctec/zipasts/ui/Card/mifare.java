@@ -611,6 +611,7 @@ public class mifare {
                 respuesta ="ITE";
             }else{
                 respuesta ="CLONADA";
+                return respuesta;
             }
             String info_tar= leerOtros(rfCard);
             respuesta= leerIdTarjeta(rfCard);
@@ -618,14 +619,14 @@ public class mifare {
             {
                 datoTarjeta.setIdCard(respuesta);
             }else{
-                return  respuesta;
+                return  respuesta + " No se pudo identificar el id de la tarjeta";
             }
             respuesta="";
             respuesta= leerTipoTarjeta(rfCard);
             if (!respuesta.equals("err")) {
                 datoTarjeta.setTipoTarjeta(respuesta);
             }else{
-                return  respuesta;
+                return  respuesta + " No se pudo identificar el tipo de tarjeta";
             }
 
             respuesta="";
@@ -633,28 +634,28 @@ public class mifare {
             if (!respuesta.equals("err")) {
                 datoTarjeta.setPlacaPort(respuesta);
             }else{
-                return  respuesta;
+                return  respuesta + " No se pudo identificar la placa de la tarjeta";
             }
             respuesta="";
             respuesta= leerNumInterno(rfCard);
             if (!respuesta.equals("err")) {
                 datoTarjeta.setInternoPort(respuesta);
             }else{
-                return  respuesta;
+                return  respuesta + " No se pudo identificar el número interno de la tarjeta";
             }
             respuesta="";
             respuesta= leerCodEmpresa(rfCard);
             if (!respuesta.equals("err")) {
                 datoTarjeta.setCodEmpresa(respuesta);
             }else{
-                return  respuesta;
+                return  respuesta + " No se pudo identificar el código de la empresa de la tarjeta";
             }
             respuesta="";
             respuesta= leerEstado(rfCard);
             if (!respuesta.equals("err")) {
                 datoTarjeta.setEstCard(respuesta);
             }else{
-                return  respuesta;
+                return  respuesta + " No se pudo identificar el estado de la tarjeta";
             }
 
             respuesta="";
@@ -662,7 +663,7 @@ public class mifare {
             if (!respuesta.equals("err")) {
                 datoTarjeta.setTotRecargas(respuesta);
             }else{
-                return  respuesta;
+                return  respuesta + " No se pudo identificar el total de recargas de la tarjeta";
             }
 
             respuesta="";
@@ -670,14 +671,14 @@ public class mifare {
             if (!respuesta.equals("err")) {
                 datoTarjeta.setSaldo(respuesta);
             }else{
-                return  respuesta;
+                return  respuesta + " No se pudo identificar el saldo de la tarjeta";
             }
             respuesta="";
             respuesta= leerFechaAsig(rfCard);
             if (!respuesta.equals("err")) {
                 datoTarjeta.setFechaAsig(respuesta);
             }else{
-                return  respuesta;
+                return  respuesta + " No se pudo identificar la fecha asignada de la tarjeta";
             }
 
             respuesta="";
@@ -685,14 +686,14 @@ public class mifare {
             if (!respuesta.equals("err")) {
                 datoTarjeta.setUltHoraRec(respuesta);
             }else{
-                return  respuesta;
+                return  respuesta + " No se pudo identificar el UHH de la tarjeta";
             }
             respuesta="";
             respuesta= leerUFRecarga(rfCard);
             if (!respuesta.equals("err")) {
                 datoTarjeta.setUltFecRec(respuesta);
             }else{
-                return  respuesta;
+                return  respuesta + " No se pudo identificar el UF de la tarjeta";
             }
             respuesta="ITE";
             ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 300);
