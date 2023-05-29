@@ -3,6 +3,8 @@ package com.ctec.zipasts.ui.control;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -286,16 +288,22 @@ public class ControlFragment extends Fragment {
                         {
                             sweetAlertDialog.dismiss();
                             actionCallback.sendResponse(respuesta);
+                            mHandler.postDelayed(() -> {
+                                ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 300);
+                                toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
+                            },2000);
                         }
                     }
                     if(datoTarjeta.getUltHoraRec().length()>4){
                         horaAnterior= datoTarjeta.getUltHoraRec().substring(0,2)+":"+datoTarjeta.getUltHoraRec().substring(2,4)+":"+datoTarjeta.getUltHoraRec().substring(4,6);
                     }else{
                         horaAnterior= "00:00:00";
-                    }actionCallback.sendResponse(respuesta);
+                    }
+                    actionCallback.sendResponse(respuesta);
                     mHandler.postDelayed(() -> {
-
-                    },3000);
+                        ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 300);
+                        toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
+                    },2000);
 
                 } else {
                     if (sweetAlertDialog.isShowing())
@@ -305,6 +313,8 @@ public class ControlFragment extends Fragment {
                 }
             };
             device.listenForCardPresent(listener, TimeConstants.SECOND * 5);
+
+
 
         } catch (DeviceException e) {
             try {
@@ -434,6 +444,11 @@ public class ControlFragment extends Fragment {
                     //sweetAlertDialog.setConfirmClickListener(sweetAlertDialog -> dialogPago());
                 }
 
+                //Cerramos el puerto después de realizar el proceso
+                if (isOpened){
+                    device.close();
+                    isOpened = false;
+                }
 
             }catch (Exception e){
                 e.printStackTrace();

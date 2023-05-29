@@ -6,6 +6,7 @@ import static com.ctec.zipasts.ui.Helper.Utils.encriptarDato;
 
 import android.media.AudioManager;
 import android.media.ToneGenerator;
+import android.os.Handler;
 import android.util.Log;
 
 import com.cloudpos.DeviceException;
@@ -601,103 +602,104 @@ public class mifare {
 
     public String leerInfoTarjeta(DatoTarjeta datoTarjeta, Card rfCard) {
 
-        String respuesta="";
+        String respuesta = "";
         boolean valido = false;
 
         try {
 
-            valido= validarClonacion(rfCard);
-            if(valido){
-                respuesta ="ITE";
-            }else{
-                respuesta ="CLONADA";
+            valido = validarClonacion(rfCard);
+            if (valido) {
+                respuesta = "ITE";
+            } else {
+                respuesta = "CLONADA";
                 return respuesta;
             }
-            String info_tar= leerOtros(rfCard);
-            respuesta= leerIdTarjeta(rfCard);
-            if (!respuesta.equals("err"))
-            {
+            String info_tar = leerOtros(rfCard);
+            respuesta = leerIdTarjeta(rfCard);
+            if (!respuesta.equals("err")) {
                 datoTarjeta.setIdCard(respuesta);
-            }else{
-                return  respuesta + " No se pudo identificar el id de la tarjeta";
+            } else {
+                return respuesta + " No se pudo identificar el id de la tarjeta";
             }
-            respuesta="";
-            respuesta= leerTipoTarjeta(rfCard);
+            respuesta = "";
+            respuesta = leerTipoTarjeta(rfCard);
             if (!respuesta.equals("err")) {
                 datoTarjeta.setTipoTarjeta(respuesta);
-            }else{
-                return  respuesta + " No se pudo identificar el tipo de tarjeta";
+            } else {
+                return respuesta + " No se pudo identificar el tipo de tarjeta";
             }
 
-            respuesta="";
-            respuesta= leerPlaca(rfCard);
+            respuesta = "";
+            respuesta = leerPlaca(rfCard);
             if (!respuesta.equals("err")) {
                 datoTarjeta.setPlacaPort(respuesta);
-            }else{
-                return  respuesta + " No se pudo identificar la placa de la tarjeta";
+            } else {
+                return respuesta + " No se pudo identificar la placa de la tarjeta";
             }
-            respuesta="";
-            respuesta= leerNumInterno(rfCard);
+            respuesta = "";
+            respuesta = leerNumInterno(rfCard);
             if (!respuesta.equals("err")) {
                 datoTarjeta.setInternoPort(respuesta);
-            }else{
-                return  respuesta + " No se pudo identificar el número interno de la tarjeta";
+            } else {
+                return respuesta + " No se pudo identificar el número interno de la tarjeta";
             }
-            respuesta="";
-            respuesta= leerCodEmpresa(rfCard);
+            respuesta = "";
+            respuesta = leerCodEmpresa(rfCard);
             if (!respuesta.equals("err")) {
                 datoTarjeta.setCodEmpresa(respuesta);
-            }else{
-                return  respuesta + " No se pudo identificar el código de la empresa de la tarjeta";
-            }
-            respuesta="";
-            respuesta= leerEstado(rfCard);
-            if (!respuesta.equals("err")) {
-                datoTarjeta.setEstCard(respuesta);
-            }else{
-                return  respuesta + " No se pudo identificar el estado de la tarjeta";
+            } else {
+                return respuesta + " No se pudo identificar el código de la empresa de la tarjeta";
             }
 
-            respuesta="";
-            respuesta= leerTotalRecargas(rfCard);
+            //respuesta="";
+            //respuesta= leerEstado(rfCard);
+            //if (!respuesta.equals("err")) {
+            //    datoTarjeta.setEstCard(respuesta);
+            //}else{
+            //    return  respuesta + " No se pudo identificar el estado de la tarjeta";
+            //}
+
+            respuesta = "";
+            respuesta = leerTotalRecargas(rfCard);
             if (!respuesta.equals("err")) {
                 datoTarjeta.setTotRecargas(respuesta);
-            }else{
-                return  respuesta + " No se pudo identificar el total de recargas de la tarjeta";
+            } else {
+                return respuesta + " No se pudo identificar el total de recargas de la tarjeta";
             }
 
-            respuesta="";
-            respuesta= leerSaldo(rfCard);
+            respuesta = "";
+            respuesta = leerSaldo(rfCard);
             if (!respuesta.equals("err")) {
                 datoTarjeta.setSaldo(respuesta);
-            }else{
-                return  respuesta + " No se pudo identificar el saldo de la tarjeta";
+            } else {
+                return respuesta + " No se pudo identificar el saldo de la tarjeta";
             }
-            respuesta="";
-            respuesta= leerFechaAsig(rfCard);
+            respuesta = "";
+            respuesta = leerFechaAsig(rfCard);
             if (!respuesta.equals("err")) {
                 datoTarjeta.setFechaAsig(respuesta);
-            }else{
-                return  respuesta + " No se pudo identificar la fecha asignada de la tarjeta";
+            } else {
+                return respuesta + " No se pudo identificar la fecha asignada de la tarjeta";
             }
 
-            respuesta="";
-            respuesta= leerUHRecarga(rfCard);
+            respuesta = "";
+            respuesta = leerUHRecarga(rfCard);
             if (!respuesta.equals("err")) {
                 datoTarjeta.setUltHoraRec(respuesta);
-            }else{
-                return  respuesta + " No se pudo identificar el UHH de la tarjeta";
+            } else {
+                return respuesta + " No se pudo identificar el UHH de la tarjeta";
             }
-            respuesta="";
-            respuesta= leerUFRecarga(rfCard);
+            respuesta = "";
+            respuesta = leerUFRecarga(rfCard);
             if (!respuesta.equals("err")) {
                 datoTarjeta.setUltFecRec(respuesta);
-            }else{
-                return  respuesta + " No se pudo identificar el UF de la tarjeta";
+            } else {
+                return respuesta + " No se pudo identificar el UF de la tarjeta";
             }
-            respuesta="ITE";
-            ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 300);
-            toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
+            respuesta = "ITE";
+
+            //ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 300);
+            //toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
             /*
             datoTarjeta.setSaldo(leerSaldo(rfCard));
             datoTarjeta.setIdCard(leerIdTarjeta(rfCard));
@@ -712,9 +714,8 @@ public class mifare {
             */
 
 
-        }catch ( Exception e)
-        {
-            respuesta ="EIT";
+        } catch (Exception e) {
+            respuesta = "EIT";
         }
         return respuesta;
     }

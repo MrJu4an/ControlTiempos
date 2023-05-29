@@ -256,7 +256,8 @@ public class LecturaFragment extends Fragment {
                     txtCodEmp.setText(datoTarjeta.getCodEmpresa().trim());
                     txtNomEmp.setText(nomEmpresa);
                     datoTarjeta.setNomEmpresa(nomEmpresa);
-                    txtEstado.setText(datoTarjeta.getEstCard().trim());
+                    //txtEstado.setText(datoTarjeta.getEstCard().trim());
+                    txtEstado.setText("N/A");
                     txtSaldo.setText(Utils.dollarFormat.format(Integer.valueOf(datoTarjeta.getSaldo().trim())));
                     btnImprimir.setEnabled(true);
                 }else if (respuesta.equals("EIT"))
