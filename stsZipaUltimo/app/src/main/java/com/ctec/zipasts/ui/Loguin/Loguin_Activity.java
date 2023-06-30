@@ -61,6 +61,7 @@ public class Loguin_Activity extends AppCompatActivity {
     public final static String NOM_USU= "NOMUSU";
     public  final static String PREF_TURNO="turno";
     private String nomUsu="";
+    public static boolean isOpened=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

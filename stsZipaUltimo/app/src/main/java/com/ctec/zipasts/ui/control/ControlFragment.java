@@ -1,6 +1,8 @@
 package com.ctec.zipasts.ui.control;
 
 
+import static com.ctec.zipasts.ui.Loguin.Loguin_Activity.isOpened;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
@@ -140,7 +142,6 @@ public class ControlFragment extends Fragment {
     private String frecuencia="";
     private FacturaModel facturaModel = new FacturaModel();
     private FacturaModel factBase = new FacturaModel();
-    private static boolean isOpened=false;
     private Date horaControl;
 
 
@@ -288,10 +289,10 @@ public class ControlFragment extends Fragment {
                         {
                             sweetAlertDialog.dismiss();
                             actionCallback.sendResponse(respuesta);
-                            mHandler.postDelayed(() -> {
-                                ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 300);
-                                toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
-                            },2000);
+                            //mHandler.postDelayed(() -> {
+                            //    ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 300);
+                            //    toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
+                            //},2000);
                         }
                     }
                     if(datoTarjeta.getUltHoraRec().length()>4){
@@ -300,10 +301,10 @@ public class ControlFragment extends Fragment {
                         horaAnterior= "00:00:00";
                     }
                     actionCallback.sendResponse(respuesta);
-                    mHandler.postDelayed(() -> {
-                        ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 300);
-                        toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
-                    },2000);
+                    //mHandler.postDelayed(() -> {
+                    //    ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 300);
+                    //    toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
+                    //},2000);
 
                 } else {
                     if (sweetAlertDialog.isShowing())
@@ -321,7 +322,17 @@ public class ControlFragment extends Fragment {
                 if (sweetAlertDialog.isShowing())
                 {
                     sweetAlertDialog.dismiss();
-                    mensaje.MensajeAdvertencia(context,"Error:",e.toString());
+                    //mensaje.MensajeAdvertencia(context,"Error:",e.toString());
+
+                    //Thread thread = new Thread(() -> {
+                    //    mensaje.MensajeAdvertencia(context,"Error:",e.toString());
+                    //});
+                    //final Handler handler=new Handler();
+                    //new Thread(() -> {
+                        //your code
+                    //    handler.post(() -> mensaje.MensajeAdvertencia(context, "Error: ", e.toString()));
+                    //}).start();
+                    Log.d("Error Tarjeta",e.toString());
                 }
                 device.close();
                 isOpened=false;
@@ -411,6 +422,10 @@ public class ControlFragment extends Fragment {
                     writePreference("Anterior",new Gson().toJson(controlAnterior));
                     nomPunto = data.getPuntoPuerto(readPreference(ConfigActivity.PREF_PUERTO)).getNombre();
                     cargarParImpr();
+                    mHandler.postDelayed(() -> {
+                        ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 300);
+                        toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
+                    },2000);
                     iniciaImpresionFactura();
                     if(sweetAlertDialog.isShowing())
                         sweetAlertDialog.dismiss();
@@ -1032,7 +1047,13 @@ public class ControlFragment extends Fragment {
                     },3000);
 
                 } else {
-                    mensaje.MensajeAdvertencia(context,Mensaje.MEN_INFO,"Error");
+                    try {
+                        device.close();
+                        mensaje.MensajeAdvertencia(context,Mensaje.MEN_INFO,"Error");
+                    } catch (DeviceException e) {
+                        e.printStackTrace();
+                    }
+
                 }
             };
             device.listenForCardPresent(listener, TimeConstants.FOREVER);
